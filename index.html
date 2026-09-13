@@ -71,7 +71,7 @@
           <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
         </div>
         <div class="board-footer">
-          <span>Ascolta · Ripeti · Varia</span>
+          <span>Ascolta · Ripeti · Personalizza</span>
           <button class="icon-button" id="heroSpeak" type="button" aria-label="Ascolta la frase del giorno">
             <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 5 6.8 9H3v6h3.8L11 19V5Zm4.5 3.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/></svg>
           </button>
@@ -81,6 +81,18 @@
 
     <section class="language-strip" aria-label="Scegli una lingua">
       <div class="language-strip-track" id="languageStrip"></div>
+    </section>
+
+    <section class="course-view-bar section-shell" aria-labelledby="courseViewLabel">
+      <div>
+        <span class="control-label" id="courseViewLabel">LINGUA DELLE SPIEGAZIONI</span>
+        <p id="courseViewHint">Scegli italiano, inglese oppure l’immersione nella lingua che stai studiando.</p>
+      </div>
+      <div class="segmented course-view-control" id="courseViewControl" role="radiogroup" aria-labelledby="courseViewLabel">
+        <button type="button" data-guide="it" role="radio" aria-checked="true">Italiano</button>
+        <button type="button" data-guide="en" role="radio" aria-checked="false">English</button>
+        <button type="button" data-guide="target" role="radio" aria-checked="false" id="targetGuideLabel">Inglese · immersione</button>
+      </div>
     </section>
 
     <section class="method section-shell" id="metodo" aria-labelledby="methodTitle">
@@ -95,29 +107,29 @@
           <h3>Impara blocchi, non parole isolate.</h3>
           <p>“Vorrei…”, “Dove posso…?”, “Non ho capito…” generano centinaia di frasi utili. Memorizza il telaio, poi cambia un solo pezzo.</p>
           <div class="formula" aria-label="Formula del metodo">
-            <span>INPUT</span><i>→</i><span>IMITAZIONE</span><i>→</i><span>USO</span><i>→</i><span>REVISIONE</span>
+            <span>ASCOLTO</span><i>→</i><span>IMITAZIONE</span><i>→</i><span>USO</span><i>→</i><span>RIPASSO</span>
           </div>
         </article>
         <ol class="method-steps">
           <li class="reveal" style="--delay: 60ms">
             <span>01</span>
-            <div><h3>Ascolta corto</h3><p>Audio di 20–60 secondi, prima col testo e poi senza.</p></div>
-            <strong>15 min</strong>
+            <div><h3>Lavora su audio brevi</h3><p>Scegli contenuti da 20 a 60 secondi: prima con il testo, poi senza.</p></div>
+            <strong>8 min</strong>
           </li>
           <li class="reveal" style="--delay: 120ms">
             <span>02</span>
-            <div><h3>Copia ad alta voce</h3><p>Shadowing: ritmo e intonazione prima della perfezione.</p></div>
-            <strong>15 min</strong>
+            <div><h3>Imita ad alta voce</h3><p>Ripeti insieme all’audio: prima ritmo e intonazione, poi precisione.</p></div>
+            <strong>7 min</strong>
           </li>
           <li class="reveal" style="--delay: 180ms">
             <span>03</span>
             <div><h3>Produci subito</h3><p>Un messaggio, una nota vocale o cinque minuti di dialogo.</p></div>
-            <strong>20 min</strong>
+            <strong>10 min</strong>
           </li>
           <li class="reveal" style="--delay: 240ms">
             <span>04</span>
             <div><h3>Ripassa ciò che sbagli</h3><p>Solo frasi vive, con richiamo a 1, 3, 7 e 14 giorni.</p></div>
-            <strong>10 min</strong>
+            <strong>5 min</strong>
           </li>
         </ol>
       </div>
@@ -130,7 +142,7 @@
           <p class="eyebrow eyebrow-light">MAPPA INTERATTIVA</p>
           <h2 id="studioTitle">Dal primo caffè<br>alla prima riunione.</h2>
         </div>
-        <p>Seleziona lingua e livello. Ogni tappa indica cosa saper fare davvero, senza trasformare la vita quotidiana in un esame universitario.</p>
+        <p id="studioIntro">Seleziona lingua e livello. Ogni tappa indica cosa saper fare davvero, senza trasformare la vita quotidiana in un esame universitario.</p>
       </div>
 
       <div class="studio-language-tabs" id="studioLanguageTabs" role="tablist" aria-label="Lingue"></div>
@@ -147,22 +159,14 @@
       <div class="roadmap-head reveal">
         <div>
           <h2 id="roadmapTitle">La rotta più corta.<br>Non una scorciatoia finta.</h2>
-          <p id="roadmapSummary">Una stima realistica cambia con la lingua, il tempo disponibile e le lingue che conosci già.</p>
-        </div>
-        <div class="pace-control">
-          <span class="control-label">TEMPO AL GIORNO</span>
-          <div class="segmented" id="paceControl" role="radiogroup" aria-label="Tempo di studio giornaliero">
-            <button type="button" data-minutes="45" role="radio" aria-checked="false">45 min</button>
-            <button type="button" data-minutes="90" role="radio" aria-checked="true">90 min</button>
-            <button type="button" data-minutes="120" role="radio" aria-checked="false">2 ore</button>
-          </div>
+          <p id="roadmapSummary">Cinque traguardi progressivi: ciò che conta è quello che riesci a fare, non il numero di ore accumulate.</p>
         </div>
       </div>
 
       <div class="estimate-row reveal">
-        <div><span>STIMA DA ZERO</span><strong id="monthsEstimate">9–12 mesi</strong></div>
-        <div><span>ORE MIRATE</span><strong id="hoursEstimate">~550 ore</strong></div>
-        <div><span>OBIETTIVO REALE</span><strong>B2 operativo</strong></div>
+        <div><span id="firstMilestoneLabel">PRIMO TRAGUARDO</span><strong id="firstMilestoneValue">1 mese · A1 essenziale</strong></div>
+        <div><span id="middleMilestoneLabel">AUTONOMIA QUOTIDIANA</span><strong id="middleMilestoneValue">6 mesi · B1 pratico</strong></div>
+        <div><span id="finalMilestoneLabel">TRAGUARDO MASSIMO</span><strong id="finalMilestoneValue">12 mesi · B2 operativo</strong></div>
       </div>
 
       <div class="route" id="routeTimeline"></div>
@@ -177,7 +181,7 @@
           <p class="eyebrow">REGOLA ANTI-FRUSTRAZIONE</p>
           <h3>Misura azioni, non sensazioni.</h3>
           <p>Conta conversazioni concluse, minuti capiti e compiti risolti. “Sentirsi fluenti” cambia ogni giorno; le prove concrete no.</p>
-          <div class="mini-metrics"><span>5 dialoghi / settimana</span><span>1 errore riciclato / giorno</span></div>
+          <div class="mini-metrics"><span>5 dialoghi alla settimana</span><span>1 errore trasformato in esercizio al giorno</span></div>
         </article>
       </div>
     </section>
@@ -187,7 +191,7 @@
       <div class="phrases-head reveal">
         <div>
           <h2 id="phrasesTitle">Parla da oggi.</h2>
-          <p>Ascolta, ripeti tre volte, poi sostituisci una parola. Segna solo ciò che riesci a dire senza leggere.</p>
+          <p id="phrasesIntro">Ascolta, ripeti tre volte, poi sostituisci una parola. Segna solo ciò che riesci a dire senza leggere.</p>
         </div>
         <label class="search-field">
           <span class="sr-only">Cerca tra le frasi</span>
@@ -265,7 +269,7 @@
         <p>Una sessione minima conta sempre. Se salti un giorno, non recuperare tutto: riparti dal blocco successivo.</p>
       </div>
       <div class="week-grid reveal" id="weekGrid">
-        <div class="week-day"><strong>LUN</strong><span>Input + frasi</span><small>Ascolta e estrai 5 blocchi</small></div>
+        <div class="week-day"><strong>LUN</strong><span>Ascolto + frasi</span><small>Ascolta ed estrai 5 espressioni</small></div>
         <div class="week-day"><strong>MAR</strong><span>Shadowing</span><small>Registra e confronta</small></div>
         <div class="week-day"><strong>MER</strong><span>Grammatica utile</span><small>Una regola, dieci esempi</small></div>
         <div class="week-day"><strong>GIO</strong><span>Conversazione</span><small>30 minuti con obiettivo</small></div>
@@ -295,6 +299,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Questa guida richiede JavaScript per cambiare lingua, ascoltare le frasi e salvare i progressi.</p></noscript>
+  <script src="course-i18n.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

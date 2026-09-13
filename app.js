@@ -47,7 +47,7 @@ const levelBase = {
 
 const languages = {
   en: {
-    name: "Inglese", code: "EN", locale: "en-GB", hours: 550,
+    name: "Inglese", code: "EN", locale: "en-GB",
     meta: "Globale · alfabeto latino",
     focus: "Pronuncia irregolare, phrasal verbs e ascolto delle forme ridotte.",
     priorities: [
@@ -83,7 +83,7 @@ const languages = {
     quiz: ["Potresti ripeterlo, per favore?", ["Could you say that again, please?", "Where are you going?", "How much is enough?"], 0],
   },
   de: {
-    name: "Tedesco", code: "DE", locale: "de-DE", hours: 700,
+    name: "Tedesco", code: "DE", locale: "de-DE",
     meta: "Europa centrale · alfabeto latino",
     focus: "Ordine dei verbi, casi e genere: prima schemi ricorrenti, poi eccezioni.",
     priorities: [
@@ -119,7 +119,7 @@ const languages = {
     quiz: ["Vorresti chiedere di ripetere.", ["Wo wohnen Sie?", "Könnten Sie das bitte wiederholen?", "Was kostet die Fahrkarte?"], 1],
   },
   es: {
-    name: "Spagnolo", code: "ES", locale: "es-ES", hours: 500,
+    name: "Spagnolo", code: "ES", locale: "es-ES",
     meta: "Iberia e Americhe · alfabeto latino",
     focus: "Coniugazioni, passato e velocità dell’ascolto tra varietà diverse.",
     priorities: [
@@ -155,7 +155,7 @@ const languages = {
     quiz: ["Vuoi dire che stai ancora imparando.", ["Estoy buscando trabajo.", "No tengo tiempo.", "Todavía estoy aprendiendo español."], 2],
   },
   fr: {
-    name: "Francese", code: "FR", locale: "fr-FR", hours: 600,
+    name: "Francese", code: "FR", locale: "fr-FR",
     meta: "Europa e mondo francofono · alfabeto latino",
     focus: "Il divario tra scrittura e suono: ascolto e pronuncia vanno allenati insieme.",
     priorities: [
@@ -191,7 +191,7 @@ const languages = {
     quiz: ["Vuoi fissare un appuntamento.", ["Je voudrais prendre rendez-vous.", "Je cherche la sortie.", "Je vais au travail."], 0],
   },
   ru: {
-    name: "Russo", code: "RU", locale: "ru-RU", hours: 900,
+    name: "Russo", code: "RU", locale: "ru-RU",
     meta: "Eurasia · alfabeto cirillico",
     focus: "Cirillico, casi, aspetto verbale e verbi di moto: costruire per strati.",
     priorities: [
@@ -227,7 +227,7 @@ const languages = {
     quiz: ["Vuoi chiedere quanto costa.", ["Где вы живёте?", "Сколько это стоит?", "Который час?"], 1],
   },
   zh: {
-    name: "Cinese", code: "ZH", locale: "zh-CN", hours: 1200,
+    name: "Cinese", code: "ZH", locale: "zh-CN",
     meta: "Mandarino · caratteri semplificati",
     focus: "Toni, comprensione orale e caratteri: separare le abilità, poi ricongiungerle.",
     priorities: [
@@ -263,7 +263,7 @@ const languages = {
     quiz: ["Vuoi chiedere di ripetere.", ["你去哪儿？", "请再说一遍。", "现在几点？"], 1],
   },
   ja: {
-    name: "Giapponese", code: "JA", locale: "ja-JP", hours: 1400,
+    name: "Giapponese", code: "JA", locale: "ja-JP",
     meta: "Giappone · kana e kanji",
     focus: "Scritture multiple, ordine della frase e livelli di cortesia.",
     priorities: [
@@ -300,29 +300,23 @@ const languages = {
   },
 };
 
-const routePhases = [
-  ["Fondamenta vive", "Suoni, scrittura essenziale e 120 blocchi ad alta frequenza. Dialoghi guidati dal primo giorno.", "A0 → A1", 0.16],
-  ["Vita quotidiana", "Casa, spesa, trasporti, salute e servizi. Un copione per ogni situazione, poi variazioni.", "A1 → A2", 0.20],
-  ["Volume comprensibile", "Letture graduate, audio con trascrizione e conversazioni settimanali sempre più lunghe.", "A2 → B1", 0.28],
-  ["Pressione reale", "Problemi, telefonate, riunioni simulate, contenuti nativi e correzione degli errori ricorrenti.", "B1 → B2", 0.28],
-  ["Consolidamento", "Progetto concreto nella lingua: candidatura, viaggio, corso o attività professionale.", "B2 operativo", 0.08],
-];
-
 function safeGet(key) {
   try { return localStorage.getItem(key); }
   catch { return null; }
 }
 
+const urlParams = new URLSearchParams(window.location.search);
+
 const state = {
-  language: safeGet("pp-language") || "en",
-  level: safeGet("pp-level") || "A1",
-  minutes: Number(safeGet("pp-minutes")) || 90,
+  language: urlParams.get("language") || safeGet("pp-language") || "en",
+  level: urlParams.get("level") || safeGet("pp-level") || "A1",
+  guide: urlParams.get("guide") || safeGet("pp-guide") || "it",
   learned: readLearned(),
 };
 
 if (!languages[state.language]) state.language = "en";
 if (!levelBase[state.level]) state.level = "A1";
-if (![45, 90, 120].includes(state.minutes)) state.minutes = 90;
+if (!["it", "en", "target"].includes(state.guide)) state.guide = "it";
 if (!state.learned || typeof state.learned !== "object" || Array.isArray(state.learned)) state.learned = {};
 
 function readLearned() {
@@ -344,15 +338,59 @@ const icons = {
   check: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 12 4.2 4.2L19 6.5"/></svg>',
 };
 
+const englishNames = {en:"English", de:"German", es:"Spanish", fr:"French", ru:"Russian", zh:"Chinese", ja:"Japanese"};
+const quizPromptsEn = {
+  en:"You did not understand and want the person to repeat.",
+  de:"You want to ask where the station is.",
+  es:"You want to say that you will check and reply.",
+  fr:"You want to book an appointment.",
+  ru:"You want to ask how much it costs.",
+  zh:"You want to ask the person to repeat.",
+  ja:"You want to ask where the station is.",
+};
+
+function activeCopy() {
+  if (state.guide === "it") return guideCopy.it;
+  if (state.guide === "en") return guideCopy.en;
+  return {...guideCopy.en, ...nativeUi[state.language]};
+}
+
+function languageName(key = state.language) {
+  if (state.guide === "it") return languages[key].name;
+  if (state.guide === "target") return nativeCourses[key].name;
+  return englishNames[key];
+}
+
+function formatDay(day) {
+  const number = String(day).padStart(3, "0");
+  if (state.guide === "target" && state.language === "zh") return `第 ${number} 天`;
+  if (state.guide === "target" && state.language === "ja") return `${number} 日目`;
+  return `${activeCopy().day} ${number}`;
+}
+
+function formatPeriod(month) {
+  if (state.guide === "it") return `${month} ${month === 1 ? "mese" : "mesi"}`;
+  if (state.guide === "en") return `${month} ${month === 1 ? "month" : "months"}`;
+  const formats = {
+    en: `${month} ${month === 1 ? "month" : "months"}`,
+    de: `${month} ${month === 1 ? "Monat" : "Monate"}`,
+    es: `${month} ${month === 1 ? "mes" : "meses"}`,
+    fr: `${month} mois`,
+    ru: `${month} ${month === 1 ? "месяц" : [2, 3].includes(month) ? "месяца" : "месяцев"}`,
+    zh: `${month} 个月`, ja: `${month} か月`,
+  };
+  return formats[state.language];
+}
+
 function languageButtons(container, compact = false) {
   container.innerHTML = Object.entries(languages).map(([key, lang]) => `
     <button type="button" data-language="${key}" ${compact ? `aria-pressed="${state.language === key}"` : `role="tab" aria-selected="${state.language === key}"`}>
-      ${compact ? `<span>${lang.code}</span>` : ""}${lang.name}
+      ${compact ? `<span>${lang.code}</span>` : ""}${languageName(key)}
     </button>`).join("");
 }
 
 function levelButtons() {
-  const names = {A1:"Prime basi", A2:"Routine", B1:"Indipendente", B2:"Operativo", C1:"Avanzato", C2:"Padronanza"};
+  const names = activeCopy().levelNames;
   document.querySelector("#levelNav").innerHTML = Object.keys(levelBase).map(level => `
     <button type="button" role="tab" data-level="${level}" aria-selected="${state.level === level}">
       <strong>${level}</strong><span>${names[level]}</span>
@@ -361,64 +399,90 @@ function levelButtons() {
 
 function renderHero() {
   const lang = languages[state.language];
+  const copy = activeCopy();
   const day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
   const phrase = lang.phrases[day % lang.phrases.length];
-  document.querySelector("#heroDay").textContent = `GIORNO ${String(day).padStart(3, "0")}`;
+  document.querySelector("#heroDay").textContent = formatDay(day);
   document.querySelector("#heroCode").textContent = lang.code;
-  document.querySelector("#heroLanguage").textContent = lang.name;
-  document.querySelector("#heroStage").textContent = `${levelBase[state.level].title} · ${state.level}`;
+  document.querySelector("#heroLanguage").textContent = languageName();
+  const stage = state.guide === "it" ? levelBase[state.level].title : state.guide === "en" ? levelBaseEn[state.level][0] : nativeCourses[state.language].levels[state.level][0];
+  document.querySelector("#heroStage").textContent = `${stage} · ${state.level}`;
   document.querySelector("#heroPhrase").textContent = `“${phrase[0]}”`;
-  document.querySelector("#heroTranslation").textContent = phrase[2];
+  document.querySelector("#heroTranslation").textContent = state.guide === "it" ? phrase[2] : state.guide === "en" ? phraseMeaningsEn[day % lang.phrases.length] : nativeCourses[state.language].noTranslation;
   document.querySelector("#heroSpeak").dataset.text = phrase[0];
 }
 
 function renderLevel() {
   const lang = languages[state.language];
+  const copy = activeCopy();
+  if (state.guide === "target") {
+    const native = nativeCourses[state.language].levels[state.level];
+    document.querySelector("#levelPanel").innerHTML = `
+      <div class="level-content">
+        <div class="level-summary">
+          <div class="big-level">${state.level}</div>
+          <h3>${escapeHtml(native[0])}</h3>
+          <p>${escapeHtml(native[1])}</p>
+        </div>
+        <div class="level-details level-details-immersion">
+          <article class="detail-block"><span>01 · ${copy.panel.goal}</span><h4>${copy.panel.goalTitle}</h4><p>${escapeHtml(native[2])}</p></article>
+          <article class="detail-block"><span>02 · ${copy.panel.focus}</span><h4>${copy.panel.focusTitle}</h4><p>${escapeHtml(native[1])}</p></article>
+          <article class="detail-block"><span>03 · ${copy.panel.routine}</span><h4>${copy.panel.routineTitle}</h4><p>${escapeHtml(native[3])}</p></article>
+          <article class="detail-block"><span>04 · ${copy.panel.immersion}</span><h4>${escapeHtml(nativeCourses[state.language].name)}</h4><p>${escapeHtml(nativeCourses[state.language].noTranslation)}</p></article>
+        </div>
+      </div>`;
+    return;
+  }
   const base = levelBase[state.level];
   const details = lang.levels[state.level];
+  const englishBase = levelBaseEn[state.level];
+  const title = state.guide === "it" ? base.title : englishBase[0];
+  const summary = state.guide === "it" ? base.summary : englishBase[1];
+  const outcome = state.guide === "it" ? base.outcome : englishBase[2];
+  const target = state.guide === "it" ? base.target : englishBase[3];
+  const routine = state.guide === "it" ? base.routine : englishBase[4];
+  const focus = state.guide === "it" ? details[0] : englishFocus[state.language][state.level];
+  const words = state.guide === "it" ? details[1] : "High-frequency language for the situations and tasks at this level.";
+  const reading = state.guide === "it" ? details[2] : "Short, level-appropriate texts linked to everyday life and work.";
+  const exit = state.guide === "it" ? details[3] : outcome;
   document.querySelector("#levelPanel").innerHTML = `
     <div class="level-content">
       <div class="level-summary">
         <div class="big-level">${state.level}</div>
-        <h3>${base.title}</h3>
-        <p>${base.summary}</p>
+        <h3>${escapeHtml(title)}</h3>
+        <p>${escapeHtml(summary)}</p>
       </div>
       <div class="level-details">
-        <article class="detail-block"><span>01 · COSA FAI</span><h4>Risultato concreto</h4><p>${base.outcome}</p></article>
-        <article class="detail-block"><span>02 · STRUTTURE</span><h4>Grammatica ad alto rendimento</h4><p>${details[0]}</p></article>
-        <article class="detail-block"><span>03 · PAROLE</span><h4>${base.target}</h4><p>${details[1]}</p></article>
-        <article class="detail-block"><span>04 · LETTURA</span><h4>Testi alla tua portata</h4><p>${details[2]}</p></article>
-        <article class="detail-block"><span>05 · ALLENAMENTO</span><h4>Routine consigliata</h4><p>${base.routine}</p></article>
-        <article class="detail-block"><span>06 · PROVA DI USCITA</span><h4>Prima di avanzare</h4><p>${details[3]}</p></article>
+        <article class="detail-block"><span>01 · ${copy.panel.goal}</span><h4>${copy.panel.goalTitle}</h4><p>${escapeHtml(outcome)}</p></article>
+        <article class="detail-block"><span>02 · ${copy.panel.focus}</span><h4>${copy.panel.focusTitle}</h4><p>${escapeHtml(focus)}</p></article>
+        <article class="detail-block"><span>03 · ${copy.panel.words}</span><h4>${escapeHtml(target)}</h4><p>${escapeHtml(words)}</p></article>
+        <article class="detail-block"><span>04 · ${copy.panel.reading}</span><h4>${copy.panel.readingTitle}</h4><p>${escapeHtml(reading)}</p></article>
+        <article class="detail-block"><span>05 · ${copy.panel.routine}</span><h4>${copy.panel.routineTitle}</h4><p>${escapeHtml(routine)}</p></article>
+        <article class="detail-block"><span>06 · ${copy.panel.exit}</span><h4>${copy.panel.exitTitle}</h4><p>${escapeHtml(exit)}</p></article>
       </div>
     </div>`;
 }
 
-function calculateMonths(hours) {
-  const weeklyHours = state.minutes / 60 * 7;
-  const raw = hours / weeklyHours / 4.345;
-  return `${Math.max(1, Math.floor(raw * .9))}–${Math.ceil(raw * 1.12)} mesi`;
-}
-
 function renderRoadmap() {
   const lang = languages[state.language];
-  const totalMonths = lang.hours / (state.minutes / 60 * 7) / 4.345;
-  document.querySelector("#monthsEstimate").textContent = calculateMonths(lang.hours);
-  document.querySelector("#hoursEstimate").textContent = `~${lang.hours} ore`;
-  document.querySelector("#roadmapSummary").textContent = `${lang.name}: ${lang.focus} Stima per studio attivo 7 giorni su 7, da adattare all’esperienza personale.`;
-  document.querySelector("#priorityTitle").textContent = `Per ${lang.name.toLowerCase()}`;
-  document.querySelector("#priorityList").innerHTML = lang.priorities.map(item => `<li>${item}</li>`).join("");
+  const copy = activeCopy();
+  const name = languageName();
+  const routes = state.guide === "target"
+    ? [[1,"A1",nativeCourses[state.language].levels.A1[1],"A1"],[2,"A1+",nativeCourses[state.language].levels.A1[2],"A1+"],[3,"A2",nativeCourses[state.language].levels.A2[1],"A2"],[6,"B1",nativeCourses[state.language].levels.B1[1],"B1"],[12,"B2",nativeCourses[state.language].levels.B2[1],"B2"]]
+    : copy.route;
+  document.querySelector("#roadmapSummary").textContent = state.guide === "target" ? `${name}: ${nativeCourses[state.language].levels.B2[1]}` : copy.roadmapSummary(name);
+  ["firstMilestoneLabel", "middleMilestoneLabel", "finalMilestoneLabel"].forEach((id, index) => document.querySelector(`#${id}`).textContent = copy.milestoneLabels[index]);
+  ["firstMilestoneValue", "middleMilestoneValue", "finalMilestoneValue"].forEach((id, index) => document.querySelector(`#${id}`).textContent = copy.milestoneValues[index]);
+  document.querySelector("#priorityTitle").textContent = copy.forLanguage(name);
+  const priorities = state.guide === "it" ? lang.priorities : state.guide === "en" ? prioritiesEn[state.language] : ["A1 · " + nativeCourses[state.language].levels.A1[3], "A2 · " + nativeCourses[state.language].levels.A2[3], "B1 · " + nativeCourses[state.language].levels.B1[3], "B2 · " + nativeCourses[state.language].levels.B2[3]];
+  document.querySelector("#priorityList").innerHTML = priorities.map(item => `<li>${escapeHtml(item)}</li>`).join("");
 
-  let elapsed = 0;
-  document.querySelector("#routeTimeline").innerHTML = routePhases.map((phase, index) => {
-    const start = Math.max(1, Math.round(elapsed * totalMonths) + 1);
-    elapsed += phase[3];
-    const end = Math.max(start, Math.round(elapsed * totalMonths));
+  document.querySelector("#routeTimeline").innerHTML = routes.map((phase, index) => {
     return `<article class="route-step reveal is-visible">
       <span class="route-marker">${String(index + 1).padStart(2, "0")}</span>
-      <span class="route-period">MESI ${start}${end > start ? `–${end}` : ""}</span>
-      <div><h3>${phase[0]}</h3><p>${phase[1]}</p></div>
-      <span class="route-target">${phase[2]}</span>
+      <span class="route-period">${formatPeriod(phase[0])}</span>
+      <div><h3>${escapeHtml(phase[1])}</h3><p>${escapeHtml(phase[2])}</p></div>
+      <span class="route-target">${escapeHtml(phase[3])}</span>
     </article>`;
   }).join("");
 }
@@ -429,21 +493,28 @@ function learnedForLanguage() {
 
 function renderPhrases(query = "") {
   const lang = languages[state.language];
+  const copy = activeCopy();
   const learned = learnedForLanguage();
-  const normalized = query.trim().toLocaleLowerCase("it");
-  const rows = lang.phrases.map((phrase, index) => ({phrase, index})).filter(({phrase}) => phrase.join(" ").toLocaleLowerCase("it").includes(normalized));
+  const locale = activeCopy().locale;
+  const normalized = query.trim().toLocaleLowerCase(locale);
+  const rows = lang.phrases.map((phrase, index) => ({phrase, index})).filter(({phrase, index}) => {
+    const guideTerms = state.guide === "en" ? `${phraseMeaningsEn[index]} ${phraseContextsEn[index]}` : "";
+    return `${phrase.join(" ")} ${guideTerms}`.toLocaleLowerCase(locale).includes(normalized);
+  });
   const container = document.querySelector("#phraseList");
   const empty = document.querySelector("#phraseEmpty");
   container.innerHTML = rows.map(({phrase, index}) => {
     const isLearned = learned.includes(index);
+    const translation = state.guide === "it" ? phrase[2] : state.guide === "en" ? phraseMeaningsEn[index] : nativeCourses[state.language].noTranslation;
+    const context = state.guide === "it" ? phrase[3] : state.guide === "en" ? phraseContextsEn[index] : "";
     return `<article class="phrase-row ${isLearned ? "is-learned" : ""}">
       <span class="phrase-index">${String(index + 1).padStart(2, "0")}</span>
       <div class="phrase-target"><strong>${escapeHtml(phrase[0])}</strong>${phrase[1] ? `<small>${escapeHtml(phrase[1])}</small>` : ""}</div>
-      <span class="phrase-translation">${escapeHtml(phrase[2])}</span>
-      <span class="phrase-context">${escapeHtml(phrase[3])}</span>
+      <span class="phrase-translation">${escapeHtml(translation)}</span>
+      ${context ? `<span class="phrase-context">${escapeHtml(context)}</span>` : "<span></span>"}
       <div class="phrase-actions">
-        <button class="phrase-action ${isLearned ? "learned" : ""}" type="button" data-learn="${index}" aria-pressed="${isLearned}" aria-label="${isLearned ? "Segna da ripassare" : "Segna come acquisita"}">${icons.check}</button>
-        <button class="phrase-action" type="button" data-speak="${escapeHtml(phrase[0])}" aria-label="Ascolta la frase">${icons.sound}</button>
+        <button class="phrase-action ${isLearned ? "learned" : ""}" type="button" data-learn="${index}" aria-pressed="${isLearned}" aria-label="${isLearned ? copy.learnedOn : copy.learnedOff}">${icons.check}</button>
+        <button class="phrase-action" type="button" data-speak="${escapeHtml(phrase[0])}" aria-label="${copy.listenPhrase}">${icons.sound}</button>
       </div>
     </article>`;
   }).join("");
@@ -453,10 +524,11 @@ function renderPhrases(query = "") {
 }
 
 function updateProgress() {
+  const copy = activeCopy();
   const count = learnedForLanguage().length;
   const total = languages[state.language].phrases.length;
   const percent = Math.round(count / total * 100);
-  document.querySelector("#progressLabel").textContent = `${count} di ${total} frasi acquisite`;
+  document.querySelector("#progressLabel").textContent = copy.progress(count, total);
   document.querySelector("#progressPercent").textContent = `${percent}%`;
   document.querySelector("#progressBar").style.width = `${percent}%`;
   document.querySelector(".progress-track").setAttribute("aria-valuenow", String(percent));
@@ -464,19 +536,24 @@ function updateProgress() {
 
 function renderCulture() {
   const lang = languages[state.language];
-  document.querySelector("#cultureStack").innerHTML = lang.culture.map((item, index) => `
+  const copy = activeCopy();
+  document.querySelector("#cultureStack").innerHTML = lang.culture.map((item, index) => {
+    const type = state.guide === "it" ? item[0] : state.guide === "en" ? (cultureTypesEn[item[0]] || item[0]) : "";
+    const note = state.guide === "it" ? item[2] : state.guide === "en" ? cultureNotesEn[state.language][index] : "";
+    return `
     <article class="culture-item reveal is-visible">
-      <span>${String(index + 1).padStart(2, "0")} · ${item[0]}</span>
-      <div><blockquote>“${escapeHtml(item[1])}”</blockquote><p>${escapeHtml(item[2])}</p></div>
-      <button class="phrase-action" type="button" data-speak="${escapeHtml(item[1])}" aria-label="Ascolta la citazione">${icons.sound}</button>
-    </article>`).join("");
+      <span>${String(index + 1).padStart(2, "0")}${type ? ` · ${escapeHtml(type)}` : ""}</span>
+      <div><blockquote>“${escapeHtml(item[1])}”</blockquote>${note ? `<p>${escapeHtml(note)}</p>` : ""}</div>
+      <button class="phrase-action" type="button" data-speak="${escapeHtml(item[1])}" aria-label="${copy.listenQuote}">${icons.sound}</button>
+    </article>`;
+  }).join("");
 }
 
 function renderQuiz() {
   const lang = languages[state.language];
   const [prompt, options] = lang.quiz;
-  document.querySelector("#quizLanguage").textContent = `${lang.name.toLocaleUpperCase("it")} · A1`;
-  document.querySelector("#quizPrompt").textContent = prompt;
+  document.querySelector("#quizLanguage").textContent = `${languageName().toLocaleUpperCase(activeCopy().locale)} · A1`;
+  document.querySelector("#quizPrompt").textContent = state.guide === "it" ? prompt : state.guide === "en" ? quizPromptsEn[state.language] : nativeCourses[state.language].quiz;
   document.querySelector("#quizOptions").innerHTML = options.map((option, index) => `
     <button class="quiz-option" type="button" data-answer="${index}"><span>${String.fromCharCode(65 + index)}</span>${escapeHtml(option)}</button>`).join("");
   const feedback = document.querySelector("#quizFeedback");
@@ -490,10 +567,41 @@ function renderSelection() {
     if (button.hasAttribute("aria-selected")) button.setAttribute("aria-selected", String(button.dataset.language === state.language));
   });
   document.querySelectorAll("[data-level]").forEach(button => button.setAttribute("aria-selected", String(button.dataset.level === state.level)));
-  document.querySelectorAll("[data-minutes]").forEach(button => button.setAttribute("aria-checked", String(Number(button.dataset.minutes) === state.minutes)));
+  document.querySelectorAll("[data-guide]").forEach(button => button.setAttribute("aria-checked", String(button.dataset.guide === state.guide)));
+}
+
+function renderGuideChrome() {
+  const copy = activeCopy();
+  document.documentElement.lang = state.guide === "target" ? languages[state.language].locale.split("-")[0] : copy.locale;
+  document.querySelector("#courseViewLabel").textContent = copy.viewLabel;
+  document.querySelector("#courseViewHint").textContent = copy.viewHint;
+  document.querySelector("#targetGuideLabel").textContent = `${nativeCourses[state.language].name} · ${copy.targetSuffix}`;
+  if (state.guide === "it") {
+    document.querySelector("#studioTitle").innerHTML = "Dal primo caffè<br>alla prima riunione.";
+    document.querySelector("#studioIntro").textContent = "Seleziona lingua e livello. Ogni tappa indica cosa saper fare davvero, senza trasformare la vita quotidiana in un esame universitario.";
+    document.querySelector("#roadmapTitle").innerHTML = "La rotta più corta.<br>Non una scorciatoia finta.";
+    document.querySelector("#phrasesTitle").textContent = "Parla da oggi.";
+    document.querySelector("#phrasesIntro").textContent = "Ascolta, ripeti tre volte, poi sostituisci una parola. Segna solo ciò che riesci a dire senza leggere.";
+  } else if (state.guide === "en") {
+    document.querySelector("#studioTitle").textContent = "From your first coffee to your first meeting.";
+    document.querySelector("#studioIntro").textContent = "Choose a language and a level. Each stage describes what you should be able to do in real life.";
+    document.querySelector("#roadmapTitle").textContent = "The shortest route to an operational B2.";
+    document.querySelector("#phrasesTitle").textContent = "Start speaking today.";
+    document.querySelector("#phrasesIntro").textContent = "Listen, repeat three times, then change one element. Mark a phrase only when you can say it without reading.";
+  } else {
+    document.querySelector("#studioTitle").textContent = copy.studioTitle;
+    document.querySelector("#studioIntro").textContent = copy.studioIntro;
+    document.querySelector("#roadmapTitle").textContent = copy.roadmapTitle;
+    document.querySelector("#phrasesTitle").textContent = copy.phrasesTitle;
+    document.querySelector("#phrasesIntro").textContent = copy.phrasesIntro;
+  }
+  languageButtons(document.querySelector("#languageStrip"), true);
+  languageButtons(document.querySelector("#studioLanguageTabs"));
+  levelButtons();
 }
 
 function renderAll() {
+  renderGuideChrome();
   renderSelection();
   renderHero();
   renderLevel();
@@ -510,16 +618,24 @@ function setLanguage(key) {
   renderAll();
 }
 
+function setGuide(key) {
+  if (!["it", "en", "target"].includes(key)) return;
+  state.guide = key;
+  persist("pp-guide", key);
+  renderAll();
+}
+
 function speak(text) {
+  const copy = activeCopy();
   if (!("speechSynthesis" in window)) {
-    showToast("La sintesi vocale non è disponibile in questo browser.");
+    showToast(copy.voiceMissing);
     return;
   }
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = languages[state.language].locale;
   utterance.rate = state.language === "zh" || state.language === "ja" ? .78 : .88;
-  utterance.onerror = () => showToast("Voce non disponibile: installa la voce di sistema per questa lingua.");
+  utterance.onerror = () => showToast(copy.voiceInstall);
   window.speechSynthesis.speak(utterance);
 }
 
@@ -533,12 +649,13 @@ function showToast(message) {
 }
 
 function toggleLearned(index) {
+  const copy = activeCopy();
   const current = learnedForLanguage();
   const updated = current.includes(index) ? current.filter(item => item !== index) : [...current, index];
   state.learned[state.language] = updated;
   persist("pp-learned", state.learned);
   renderPhrases(document.querySelector("#phraseSearch").value);
-  showToast(current.includes(index) ? "Frase rimessa nel ripasso." : "Frase acquisita. Provala senza leggere.");
+  showToast(current.includes(index) ? copy.review : copy.saved);
 }
 
 function setupEvents() {
@@ -553,12 +670,8 @@ function setupEvents() {
       renderSelection(); renderHero(); renderLevel();
     }
 
-    const paceButton = event.target.closest("[data-minutes]");
-    if (paceButton) {
-      state.minutes = Number(paceButton.dataset.minutes);
-      persist("pp-minutes", String(state.minutes));
-      renderSelection(); renderRoadmap();
-    }
+    const guideButton = event.target.closest("[data-guide]");
+    if (guideButton) setGuide(guideButton.dataset.guide);
 
     const speakButton = event.target.closest("[data-speak]");
     if (speakButton) speak(speakButton.dataset.speak);
@@ -595,6 +708,7 @@ function setupEvents() {
 }
 
 function checkAnswer(button) {
+  const copy = activeCopy();
   const correct = languages[state.language].quiz[2];
   const selected = Number(button.dataset.answer);
   document.querySelectorAll(".quiz-option").forEach(option => {
@@ -603,10 +717,10 @@ function checkAnswer(button) {
   });
   const feedback = document.querySelector("#quizFeedback");
   if (selected === correct) {
-    feedback.textContent = "Esatto. Ora dilla una volta senza guardare.";
+    feedback.textContent = copy.correct;
   } else {
     button.classList.add("wrong");
-    feedback.textContent = "Non ancora. Leggi la risposta corretta ad alta voce e riprova più tardi.";
+    feedback.textContent = copy.wrong;
     feedback.classList.add("error");
   }
 }
@@ -625,9 +739,6 @@ function setupReveals() {
 }
 
 function init() {
-  languageButtons(document.querySelector("#languageStrip"), true);
-  languageButtons(document.querySelector("#studioLanguageTabs"));
-  levelButtons();
   renderAll();
   setupEvents();
   setupReveals();

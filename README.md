@@ -8,6 +8,7 @@ Copia nella stessa cartella del server:
 
 - `index.html`
 - `styles.css`
+- `course-i18n.js`
 - `app.js`
 
 Non servono PHP, database, Node.js o build.
@@ -20,10 +21,11 @@ py -m http.server 8080
 
 Apri `http://localhost:8080`.
 
+Le viste si possono anche condividere con parametri, per esempio `?guide=en&language=de&level=B2` oppure `?guide=target&language=ja&level=A2`.
+
 ## Smoke check
 
-1. Cambia lingua e livello e verifica che i contenuti si aggiornino.
+1. Cambia lingua, livello e lingua delle spiegazioni; verifica italiano, inglese e immersione.
 2. Prova ascolto, ricerca frasi e quiz.
 3. Marca una frase come acquisita, ricarica e verifica che il progresso resti salvato.
 4. Controlla menu e layout a 390 px e 1440 px.
-
