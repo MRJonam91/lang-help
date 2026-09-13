@@ -300,6 +300,12 @@ const languages = {
   },
 };
 
+Object.entries(languages).forEach(([key, language]) => {
+  language.phrases = phrasePack.map(row => [row[phraseLanguageIndex[key]], "", row[1], row[0], row[2]]);
+});
+
+let phraseLimit = 20;
+
 function safeGet(key) {
   try { return localStorage.getItem(key); }
   catch { return null; }
@@ -362,6 +368,18 @@ function languageName(key = state.language) {
   return englishNames[key];
 }
 
+function interfaceLanguage() {
+  if (state.guide === "it") return "it";
+  if (state.guide === "en") return "en";
+  return state.language;
+}
+
+function phraseTranslation(phrase) {
+  if (state.guide === "it") return phrase[0] === phrase[2] ? "" : phrase[2];
+  if (state.guide === "en") return phrase[0] === phrase[4] ? "" : phrase[4];
+  return "";
+}
+
 function formatDay(day) {
   const number = String(day).padStart(3, "0");
   if (state.guide === "target" && state.language === "zh") return `第 ${number} 天`;
@@ -409,7 +427,7 @@ function renderHero() {
   const stage = state.guide === "it" ? levelBase[state.level].title : state.guide === "en" ? levelBaseEn[state.level][0] : nativeCourses[state.language].levels[state.level][0];
   document.querySelector("#heroStage").textContent = `${stage} · ${state.level}`;
   document.querySelector("#heroPhrase").textContent = `“${phrase[0]}”`;
-  document.querySelector("#heroTranslation").textContent = state.guide === "it" ? phrase[2] : state.guide === "en" ? phraseMeaningsEn[day % lang.phrases.length] : nativeCourses[state.language].noTranslation;
+  document.querySelector("#heroTranslation").textContent = phraseTranslation(phrase);
   document.querySelector("#heroSpeak").dataset.text = phrase[0];
 }
 
@@ -495,19 +513,22 @@ function learnedForLanguage() {
 function renderPhrases(query = "") {
   const lang = languages[state.language];
   const copy = activeCopy();
+  const uiLanguage = interfaceLanguage();
+  const ui = phraseUiCopy[uiLanguage];
   const learned = learnedForLanguage();
   const locale = activeCopy().locale;
   const normalized = query.trim().toLocaleLowerCase(locale);
-  const rows = lang.phrases.map((phrase, index) => ({phrase, index})).filter(({phrase, index}) => {
-    const guideTerms = state.guide === "en" ? `${phraseMeaningsEn[index]} ${phraseContextsEn[index]}` : "";
-    return `${phrase.join(" ")} ${guideTerms}`.toLocaleLowerCase(locale).includes(normalized);
+  const matches = lang.phrases.map((phrase, index) => ({phrase, index})).filter(({phrase}) => {
+    const category = phraseCategoryNames[uiLanguage][phrase[3]];
+    return `${phrase.join(" ")} ${category}`.toLocaleLowerCase(locale).includes(normalized);
   });
+  const rows = normalized ? matches : matches.slice(0, phraseLimit);
   const container = document.querySelector("#phraseList");
   const empty = document.querySelector("#phraseEmpty");
   container.innerHTML = rows.map(({phrase, index}) => {
     const isLearned = learned.includes(index);
-    const translation = state.guide === "it" ? phrase[2] : state.guide === "en" ? phraseMeaningsEn[index] : nativeCourses[state.language].noTranslation;
-    const context = state.guide === "it" ? phrase[3] : state.guide === "en" ? phraseContextsEn[index] : "";
+    const translation = phraseTranslation(phrase);
+    const context = phraseCategoryNames[uiLanguage][phrase[3]];
     return `<article class="phrase-row ${isLearned ? "is-learned" : ""}">
       <span class="phrase-index">${String(index + 1).padStart(2, "0")}</span>
       <div class="phrase-target"><strong>${escapeHtml(phrase[0])}</strong>${phrase[1] ? `<small>${escapeHtml(phrase[1])}</small>` : ""}</div>
@@ -521,6 +542,14 @@ function renderPhrases(query = "") {
   }).join("");
   container.hidden = rows.length === 0;
   empty.hidden = rows.length > 0;
+  document.querySelector("#phraseSearch").placeholder = ui.search;
+  empty.querySelector("h3").textContent = ui.empty;
+  empty.querySelector("p").textContent = ui.emptyText;
+  document.querySelector("#clearSearch").textContent = ui.clear;
+  const more = document.querySelector("#phraseMore");
+  more.hidden = Boolean(normalized) || rows.length >= matches.length;
+  document.querySelector("#phraseVisible").textContent = ui.visible(rows.length, matches.length);
+  document.querySelector("#loadMorePhrases").textContent = ui.more;
   updateProgress();
 }
 
@@ -548,6 +577,39 @@ function renderCulture() {
       <button class="phrase-action" type="button" data-speak="${escapeHtml(item[1])}" aria-label="${copy.listenQuote}">${icons.sound}</button>
     </article>`;
   }).join("");
+}
+
+function renderSurvival() {
+  const uiLanguage = interfaceLanguage();
+  const copy = survivalCopy[uiLanguage];
+  const categories = ["help", "home", "work", "health", "services", "relationships"];
+  const examplesFor = category => languages[state.language].phrases
+    .filter(phrase => phrase[3] === category)
+    .slice(0, 4);
+  const exampleMarkup = (phrase, onDark = false) => {
+    const translation = phraseTranslation(phrase);
+    return `<div class="survival-example ${onDark ? "survival-example-dark" : ""}">
+      <div><strong>${escapeHtml(phrase[0])}</strong>${translation ? `<small>${escapeHtml(translation)}</small>` : ""}</div>
+      <button class="phrase-action" type="button" data-speak="${escapeHtml(phrase[0])}" aria-label="${escapeHtml(activeCopy().listenPhrase)}">${icons.sound}</button>
+    </div>`;
+  };
+
+  document.querySelector("#survivalKicker").textContent = copy.kicker;
+  document.querySelector("#survivalTitle").textContent = copy.title;
+  document.querySelector("#survivalIntro").textContent = copy.intro;
+  document.querySelector("#survivalPriority").textContent = `${copy.priority} 01`;
+  document.querySelector("#survivalFeatureTitle").textContent = phraseCategoryNames[uiLanguage].help;
+  document.querySelector("#survivalFeatureDescription").textContent = phraseCategoryDescriptions[uiLanguage].help;
+  document.querySelector("#survivalFeatureExamples").innerHTML = examplesFor("help").map(phrase => exampleMarkup(phrase, true)).join("");
+  document.querySelector("#survivalList").innerHTML = categories.slice(1).map((category, index) => `
+    <article class="reveal is-visible">
+      <span>${String(index + 2).padStart(2, "0")}</span>
+      <div class="survival-room">
+        <h3>${escapeHtml(phraseCategoryNames[uiLanguage][category])}</h3>
+        <p>${escapeHtml(phraseCategoryDescriptions[uiLanguage][category])}</p>
+        <div class="survival-examples"><span class="survival-examples-label">${escapeHtml(copy.examples)}</span>${examplesFor(category).map(phrase => exampleMarkup(phrase)).join("")}</div>
+      </div>
+    </article>`).join("");
 }
 
 function renderQuiz() {
@@ -632,12 +694,14 @@ function renderAll() {
   renderRoadmap();
   renderPhrases(document.querySelector("#phraseSearch").value);
   renderCulture();
+  renderSurvival();
   renderQuiz();
 }
 
 function setLanguage(key) {
   if (!languages[key]) return;
   state.language = key;
+  phraseLimit = 20;
   if (key === "en" && state.guide === "target") {
     state.guide = "en";
     persist("pp-guide", state.guide);
@@ -650,6 +714,7 @@ function setGuide(key) {
   if (!["it", "en", "target"].includes(key)) return;
   if (key === "target" && state.language === "en") return;
   state.guide = key;
+  phraseLimit = 20;
   persist("pp-guide", key);
   renderAll();
 }
@@ -710,6 +775,11 @@ function setupEvents() {
 
     const answerButton = event.target.closest("[data-answer]");
     if (answerButton) checkAnswer(answerButton);
+
+    if (event.target.closest("#loadMorePhrases")) {
+      phraseLimit += 20;
+      renderPhrases(document.querySelector("#phraseSearch").value);
+    }
   });
 
   document.querySelector("#heroSpeak").addEventListener("click", event => speak(event.currentTarget.dataset.text));

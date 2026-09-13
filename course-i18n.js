@@ -88,12 +88,6 @@ const prioritiesEn = {
   ja:["Learn hiragana and katakana immediately; use rōmaji only as a short bridge.","Build sentences through particles and chunks, keeping the verb at the end.","Separate です/ます style from plain form before pursuing advanced keigo.","Learn kanji inside frequent words and sentences with spaced recall."],
 };
 
-const phraseMeaningsEn = [
-  "Could you repeat that, please?", "I’m still learning this language.", "How much does this cost?", "I’d like to book an appointment.",
-  "Where is the station?", "I’ll check and let you know.", "Could you show me how to do it?", "I need help with this form.",
-];
-const phraseContextsEn = ["help", "help", "shopping", "services", "transport", "work", "work", "documents"];
-
 const cultureTypesEn = {FILM:"FILM", SERIE:"SERIES", LIBRO:"BOOK", CANZONE:"SONG", POESIA:"POETRY", FILOSOFIA:"PHILOSOPHY", CLASSICO:"CLASSIC", PROVERBIO:"PROVERB", TEATRO:"THEATRE", ANIMAZIONE:"ANIMATION", ANIME:"ANIME", CINEMA:"FILM"};
 const cultureNotesEn = {
   en:["The Terminator · concise promise and future","Game of Thrones · present progressive","Hamlet · rhythm and contrast","The Beatles · short imperative"],

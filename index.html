@@ -201,11 +201,15 @@
       </div>
 
       <div class="phrase-progress reveal">
-        <div><span id="progressLabel">0 di 8 frasi acquisite</span><strong id="progressPercent">0%</strong></div>
+        <div><span id="progressLabel">0 di 100 frasi acquisite</span><strong id="progressPercent">0%</strong></div>
         <div class="progress-track" role="progressbar" aria-label="Frasi acquisite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progressBar"></span></div>
       </div>
 
       <div class="phrase-list" id="phraseList" aria-live="polite"></div>
+      <div class="phrase-more" id="phraseMore">
+        <span id="phraseVisible">20 di 100 frasi</span>
+        <button class="button button-secondary" id="loadMorePhrases" type="button">Mostra altre 20</button>
+      </div>
       <div class="empty-state" id="phraseEmpty" hidden>
         <svg aria-hidden="true" viewBox="0 0 48 48"><path d="M10 13h28v22H22l-8 6v-6h-4V13Z"/><path d="M17 21h14M17 27h9"/></svg>
         <h3>Nessuna frase trovata</h3>
@@ -226,25 +230,20 @@
     </section>
 
     <section class="survival section-shell" aria-labelledby="survivalTitle">
-      <div class="section-kicker reveal"><span>06</span> KIT DI AUTONOMIA</div>
+      <div class="section-kicker reveal"><span>06</span> <span id="survivalKicker">KIT DI AUTONOMIA</span></div>
       <div class="survival-head reveal">
         <h2 id="survivalTitle">Le sei stanze<br>della vita reale.</h2>
-        <p>Se riesci a gestire questi contesti, puoi iniziare a vivere nel paese anche con una grammatica imperfetta.</p>
+        <p id="survivalIntro">Impara prima le frasi che ti permettono di vivere, lavorare e risolvere problemi anche con una grammatica imperfetta.</p>
       </div>
       <div class="survival-grid">
-        <article class="survival-feature reveal">
+        <article class="survival-feature reveal" id="survivalFeature">
           <div class="orbit" aria-hidden="true"><span></span><i></i></div>
-          <span>PRIORITÀ 01</span>
-          <h3>Chiedere e capire</h3>
-          <p>Ripetere, rallentare, confermare, fare spelling e guadagnare tempo: sono i moltiplicatori di ogni conversazione.</p>
+          <span id="survivalPriority">PRIORITÀ 01</span>
+          <h3 id="survivalFeatureTitle">Chiedere e capire</h3>
+          <p id="survivalFeatureDescription">Ripetere, rallentare, confermare e guadagnare tempo.</p>
+          <div class="survival-examples survival-examples-feature" id="survivalFeatureExamples"></div>
         </article>
-        <div class="survival-list">
-          <article class="reveal"><span>02</span><div><h3>Casa</h3><p>Affitto, bollette, guasti, vicini</p></div></article>
-          <article class="reveal"><span>03</span><div><h3>Lavoro</h3><p>Orari, compiti, dubbi, feedback</p></div></article>
-          <article class="reveal"><span>04</span><div><h3>Salute</h3><p>Sintomi, farmaci, appuntamenti</p></div></article>
-          <article class="reveal"><span>05</span><div><h3>Servizi</h3><p>Trasporti, banca, documenti</p></div></article>
-          <article class="reveal"><span>06</span><div><h3>Relazioni</h3><p>Inviti, confini, piccoli malintesi</p></div></article>
-        </div>
+        <div class="survival-list" id="survivalList"></div>
       </div>
     </section>
 
@@ -285,7 +284,7 @@
         <h2>Non aspettare<br>di sentirti pronto.</h2>
       </div>
       <div class="closing-action reveal" style="--delay: 100ms">
-        <p>Scegli una lingua. Impara otto frasi. Usane una oggi con una persona vera o in una nota vocale.</p>
+        <p>Scegli una lingua. Impara il primo blocco di venti frasi. Usane una oggi con una persona vera o in una nota vocale.</p>
         <a class="button button-primary" href="#laboratorio">Inizia dal tuo livello</a>
       </div>
     </section>
@@ -300,6 +299,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <noscript><p class="noscript">Questa guida richiede JavaScript per cambiare lingua, ascoltare le frasi e salvare i progressi.</p></noscript>
   <script src="course-i18n.js" defer></script>
+  <script src="phrase-data.js" defer></script>
   <script src="app.js" defer></script>
 </body>
 </html>

@@ -733,6 +733,9 @@ button { color: inherit; }
 .phrase-action:active { transform: translateY(1px) scale(.96); }
 .phrase-action svg { width: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .phrase-action.learned { border-color: var(--accent); background: var(--accent); color: var(--white); }
+.phrase-more { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 1.5rem; }
+.phrase-more > span { color: var(--ink-soft); font: .7rem ui-monospace, monospace; letter-spacing: .05em; }
+.phrase-more[hidden] { display: none; }
 
 .empty-state { padding: 5rem 1rem; text-align: center; }
 .empty-state svg { width: 52px; fill: none; stroke: var(--accent-dark); stroke-width: 1.4; stroke-linecap: round; }
@@ -752,9 +755,9 @@ button { color: inherit; }
 
 .survival-head, .weekly-head { display: grid; grid-template-columns: 1.25fr .75fr; gap: 3rem; align-items: end; }
 .survival-grid { display: grid; grid-template-columns: .75fr 1.25fr; gap: clamp(2rem, 6vw, 6rem); margin-top: 6rem; }
-.survival-feature { position: relative; min-height: 430px; padding: 2.5rem; overflow: hidden; border-radius: var(--radius-lg); color: var(--white); background: var(--accent-dark); }
+.survival-feature { position: relative; align-self: start; min-height: 620px; padding: 2.5rem; overflow: hidden; border-radius: var(--radius-lg); color: var(--white); background: var(--accent-dark); }
 .survival-feature > span { font: .65rem ui-monospace, monospace; color: var(--accent-pale); }
-.survival-feature h3 { max-width: 8ch; margin: 8rem 0 1rem; font-size: clamp(2.4rem, 4.5vw, 4rem); line-height: .93; letter-spacing: -.05em; }
+.survival-feature h3 { max-width: 9ch; margin: 5rem 0 1rem; font-size: clamp(2.4rem, 4.5vw, 4rem); line-height: .93; letter-spacing: -.05em; }
 .survival-feature p { position: relative; z-index: 1; max-width: 38ch; color: rgba(249,250,246,.66); }
 .orbit { position: absolute; right: -75px; top: -85px; width: 270px; height: 270px; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; animation: orbit 12s linear infinite; }
 .orbit::before, .orbit::after { content: ""; position: absolute; inset: 35px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; }
@@ -763,10 +766,21 @@ button { color: inherit; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
 .survival-list { border-top: 1px solid var(--line); }
-.survival-list article { display: grid; grid-template-columns: 55px 1fr; gap: 1rem; padding: 1.7rem 0; border-bottom: 1px solid var(--line); }
+.survival-list article { display: grid; grid-template-columns: 55px 1fr; gap: 1rem; padding: 2rem 0; border-bottom: 1px solid var(--line); }
 .survival-list article > span { color: var(--accent-dark); font: .7rem ui-monospace, monospace; }
 .survival-list h3 { margin: 0; font-size: 1.3rem; }
 .survival-list p { margin: .25rem 0 0; color: var(--ink-soft); }
+.survival-examples { display: grid; gap: .65rem; margin-top: 1.35rem; }
+.survival-examples-feature { position: relative; z-index: 1; margin-top: 2rem; }
+.survival-examples-label { margin-bottom: .15rem; color: var(--accent-dark); font: .62rem ui-monospace, monospace; letter-spacing: .1em; }
+.survival-example { display: grid; grid-template-columns: 1fr 39px; gap: 1rem; align-items: center; min-width: 0; padding-top: .65rem; border-top: 1px solid var(--line); }
+.survival-example strong, .survival-example small { display: block; }
+.survival-example strong { line-height: 1.35; }
+.survival-example small { margin-top: .18rem; color: var(--ink-soft); line-height: 1.35; }
+.survival-example-dark { border-color: rgba(255,255,255,.16); }
+.survival-example-dark strong { color: var(--white); }
+.survival-example-dark small { color: rgba(249,250,246,.58); }
+.survival-example-dark .phrase-action { border-color: rgba(255,255,255,.22); color: var(--white); }
 
 .quiz { padding-bottom: clamp(6rem, 11vw, 11rem); }
 .quiz-shell { padding: clamp(2rem, 5vw, 4rem); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow), inset 0 1px 0 white; }
@@ -921,6 +935,7 @@ button { color: inherit; }
   .culture-item > div { grid-column: 1; }
   .culture-item > button { grid-column: 2; grid-row: 1 / span 2; }
   .survival-feature { min-height: 390px; padding: 2rem; }
+  .phrase-more { align-items: flex-start; flex-direction: column; }
   .quiz-shell { border-radius: 24px; }
   .quiz-meta { gap: 1rem; }
   .quiz-body h2 { font-size: 3rem; }

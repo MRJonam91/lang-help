@@ -9,6 +9,7 @@ Copia nella stessa cartella del server:
 - `index.html`
 - `styles.css`
 - `course-i18n.js`
+- `phrase-data.js`
 - `app.js`
 
 Non servono PHP, database, Node.js o build.
@@ -21,7 +22,7 @@ py -m http.server 8080
 
 Apri `http://localhost:8080`.
 
-Le viste si possono anche condividere con parametri, per esempio `?guide=en&language=de&level=B2` oppure `?guide=target&language=ja&level=A2`.
+Le viste si possono anche condividere con parametri, per esempio `?guide=en&language=de&level=B2` oppure `?guide=target&language=ja&level=A2`. Ogni corso include 100 frasi quotidiane, mostrate in blocchi progressivi da 20.
 
 ## Smoke check
 
