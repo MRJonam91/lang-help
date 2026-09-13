@@ -448,6 +448,7 @@ button { color: inherit; }
 .course-view-bar p { margin: 0; color: var(--ink-soft); font-size: .85rem; }
 .course-view-control { justify-self: end; }
 .course-view-control button { white-space: nowrap; }
+.course-view-control button[hidden] { display: none; }
 
 .method, .roadmap, .phrases, .survival, .weekly { padding-block: clamp(6rem, 11vw, 11rem); }
 
@@ -907,6 +908,7 @@ button { color: inherit; }
   .detail-block { padding-inline: 0; }
   .detail-block:nth-last-child(2) { border-bottom: 0; }
   .segmented { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; }
+  .course-view-control.is-two-options { grid-template-columns: repeat(2, 1fr); }
   .route::before { left: 15px; }
   .priority-box, .reality-check { min-height: 0; border-radius: 24px; }
   .phrase-row { gap: .7rem; }

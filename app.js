@@ -317,6 +317,7 @@ const state = {
 if (!languages[state.language]) state.language = "en";
 if (!levelBase[state.level]) state.level = "A1";
 if (!["it", "en", "target"].includes(state.guide)) state.guide = "it";
+if (state.language === "en" && state.guide === "target") state.guide = "en";
 if (!state.learned || typeof state.learned !== "object" || Array.isArray(state.learned)) state.learned = {};
 
 function readLearned() {
@@ -570,12 +571,35 @@ function renderSelection() {
   document.querySelectorAll("[data-guide]").forEach(button => button.setAttribute("aria-checked", String(button.dataset.guide === state.guide)));
 }
 
+function renderMethod() {
+  const method = activeCopy().method;
+  document.querySelector("#methodKicker").textContent = method.kicker;
+  document.querySelector("#methodTitle").textContent = method.title;
+  document.querySelector("#methodIntro").textContent = method.intro;
+  document.querySelector("#methodLeadTitle").textContent = method.leadTitle;
+  document.querySelector("#methodLeadText").textContent = method.leadText;
+  const formula = document.querySelector("#methodFormula");
+  formula.setAttribute("aria-label", method.formulaLabel);
+  formula.innerHTML = method.formula.map((item, index) => `${index ? '<i aria-hidden="true">→</i>' : ""}<span>${escapeHtml(item)}</span>`).join("");
+  method.steps.forEach((step, index) => {
+    const number = index + 1;
+    document.querySelector(`#methodStepTitle${number}`).textContent = step[0];
+    document.querySelector(`#methodStepText${number}`).textContent = step[1];
+    document.querySelector(`#methodStepTime${number}`).textContent = step[2];
+  });
+}
+
 function renderGuideChrome() {
   const copy = activeCopy();
+  const targetGuideButton = document.querySelector("#targetGuideLabel");
+  const englishCourse = state.language === "en";
   document.documentElement.lang = state.guide === "target" ? languages[state.language].locale.split("-")[0] : copy.locale;
   document.querySelector("#courseViewLabel").textContent = copy.viewLabel;
-  document.querySelector("#courseViewHint").textContent = copy.viewHint;
-  document.querySelector("#targetGuideLabel").textContent = `${nativeCourses[state.language].name} · ${copy.targetSuffix}`;
+  document.querySelector("#courseViewHint").textContent = englishCourse ? copy.viewHintEnglishCourse : copy.viewHint;
+  targetGuideButton.hidden = englishCourse;
+  targetGuideButton.textContent = `${nativeCourses[state.language].name} · ${copy.targetSuffix}`;
+  document.querySelector("#courseViewControl").classList.toggle("is-two-options", englishCourse);
+  renderMethod();
   if (state.guide === "it") {
     document.querySelector("#studioTitle").innerHTML = "Dal primo caffè<br>alla prima riunione.";
     document.querySelector("#studioIntro").textContent = "Seleziona lingua e livello. Ogni tappa indica cosa saper fare davvero, senza trasformare la vita quotidiana in un esame universitario.";
@@ -614,12 +638,17 @@ function renderAll() {
 function setLanguage(key) {
   if (!languages[key]) return;
   state.language = key;
+  if (key === "en" && state.guide === "target") {
+    state.guide = "en";
+    persist("pp-guide", state.guide);
+  }
   persist("pp-language", key);
   renderAll();
 }
 
 function setGuide(key) {
   if (!["it", "en", "target"].includes(key)) return;
+  if (key === "target" && state.language === "en") return;
   state.guide = key;
   persist("pp-guide", key);
   renderAll();

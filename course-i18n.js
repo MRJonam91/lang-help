@@ -4,7 +4,13 @@ const guideCopy = {
   it: {
     locale: "it", day: "GIORNO", viewLabel: "LINGUA DELLE SPIEGAZIONI",
     viewHint: "Scegli italiano, inglese oppure l’immersione nella lingua che stai studiando.",
+    viewHintEnglishCourse: "Per il corso d’inglese scegli la guida in italiano oppure in inglese.",
     targetSuffix: "immersione", levelNames: {A1:"Prime basi", A2:"Routine", B1:"Indipendente", B2:"Operativo", C1:"Avanzato", C2:"Padronanza"},
+    method: {
+      kicker:"IL METODO", title:"Il 20% che ti rende autonomo.", intro:"Non tutte le parole hanno la stessa utilità. Parti dalle situazioni più frequenti e costruisci automatismi: il vocabolario più ricercato arriverà dopo.",
+      leadTitle:"Impara blocchi, non parole isolate.", leadText:"“Vorrei…”, “Dove posso…?” e “Non ho capito…” generano centinaia di frasi utili. Memorizza la struttura, poi cambia un solo elemento.", formulaLabel:"Formula del metodo", formula:["ASCOLTO","IMITAZIONE","USO","RIPASSO"],
+      steps:[["Lavora su audio brevi","Scegli contenuti da 20 a 60 secondi: prima con il testo, poi senza.","8 min"],["Imita ad alta voce","Ripeti insieme all’audio: prima ritmo e intonazione, poi precisione.","7 min"],["Produci subito","Scrivi un messaggio, registra una nota vocale o conversa per cinque minuti.","10 min"],["Ripassa ciò che sbagli","Conserva solo frasi utili e riprendile dopo 1, 3, 7 e 14 giorni.","5 min"]],
+    },
     panel: {goal:"OBIETTIVO", goalTitle:"Risultato concreto", focus:"PUNTI CHIAVE", focusTitle:"Su cosa concentrarti", words:"PAROLE", wordsTitle:"Lessico ad alto rendimento", reading:"LETTURA", readingTitle:"Testi alla tua portata", routine:"ALLENAMENTO", routineTitle:"Routine consigliata", exit:"PROVA PRATICA", exitTitle:"Prima di avanzare"},
     roadmapSummary: name => `${name}: cinque traguardi progressivi. Misura ciò che sai fare, non le ore accumulate.`,
     milestoneLabels: ["PRIMO TRAGUARDO", "AUTONOMIA QUOTIDIANA", "TRAGUARDO MASSIMO"],
@@ -26,7 +32,13 @@ const guideCopy = {
   en: {
     locale: "en", day: "DAY", viewLabel: "EXPLANATION LANGUAGE",
     viewHint: "Choose Italian, English, or full immersion in the language you are learning.",
+    viewHintEnglishCourse: "For the English course, choose guidance in Italian or English.",
     targetSuffix: "immersion", levelNames: {A1:"First steps", A2:"Routines", B1:"Independent", B2:"Operational", C1:"Advanced", C2:"Mastery"},
+    method: {
+      kicker:"THE METHOD", title:"The 20% that makes you independent.", intro:"Not every word is equally useful. Start with high-frequency situations and build automatic responses; refined vocabulary can come later.",
+      leadTitle:"Learn chunks, not isolated words.", leadText:"“I would like…”, “Where can I…?” and “I didn’t understand…” generate hundreds of useful sentences. Memorise the pattern, then change one element at a time.", formulaLabel:"Method formula", formula:["LISTEN","IMITATE","USE","REVIEW"],
+      steps:[["Work with short audio clips","Choose clips lasting 20 to 60 seconds: first with the transcript, then without it.","8 min"],["Imitate aloud","Speak along with the audio: focus first on rhythm and intonation, then on accuracy.","7 min"],["Produce immediately","Write a message, record a voice note, or have a five-minute conversation.","10 min"],["Review your mistakes","Keep only useful phrases and recall them after 1, 3, 7, and 14 days.","5 min"]],
+    },
     panel: {goal:"GOAL", goalTitle:"Concrete outcome", focus:"KEY FOCUS", focusTitle:"What to work on", words:"WORDS", wordsTitle:"High-yield vocabulary", reading:"READING", readingTitle:"Texts within reach", routine:"PRACTICE", routineTitle:"Recommended routine", exit:"REAL-WORLD TEST", exitTitle:"Before moving on"},
     roadmapSummary: name => `${name}: five progressive milestones. Measure what you can do, not the hours you have logged.`,
     milestoneLabels: ["FIRST MILESTONE", "EVERYDAY INDEPENDENCE", "FINAL MILESTONE"],
@@ -185,6 +197,7 @@ const nativeUi = {
   },
   de: {
     locale:"de",day:"TAG",viewLabel:"SPRACHE DER ERKLÄRUNGEN",viewHint:"Wähle Italienisch, Englisch oder vollständige Immersion auf Deutsch.",targetSuffix:"Immersion",
+    method:{kicker:"DIE METHODE",title:"Die 20 %, die dich selbstständig machen.",intro:"Nicht alle Wörter sind gleich wichtig. Beginne mit häufigen Situationen und entwickle Automatismen; der feinere Wortschatz kommt später.",leadTitle:"Lerne Bausteine statt einzelner Wörter.",leadText:"„Ich möchte …“, „Wo kann ich …?“ und „Ich habe nicht verstanden …“ ergeben Hunderte nützliche Sätze. Präge dir das Muster ein und tausche jeweils nur einen Teil aus.",formulaLabel:"Formel der Methode",formula:["HÖREN","NACHSPRECHEN","ANWENDEN","WIEDERHOLEN"],steps:[["Arbeite mit kurzen Audiosequenzen","Wähle Ausschnitte von 20 bis 60 Sekunden: zuerst mit Text, dann ohne.","8 Min."],["Sprich laut nach","Sprich gleichzeitig mit dem Audio: zuerst Rhythmus und Intonation, dann Genauigkeit.","7 Min."],["Wende das Gelernte sofort an","Schreibe eine Nachricht, nimm eine Sprachnachricht auf oder sprich fünf Minuten lang.","10 Min."],["Wiederhole deine Fehler","Behalte nur nützliche Sätze und rufe sie nach 1, 3, 7 und 14 Tagen wieder ab.","5 Min."]]},
     levelNames:{A1:"Erste Schritte",A2:"Alltag",B1:"Selbstständig",B2:"Handlungsfähig",C1:"Fortgeschritten",C2:"Beherrschung"},
     studioTitle:"Vom ersten Kaffee bis zur ersten Besprechung.",studioIntro:"Wähle ein Niveau. Jede Etappe zeigt, was du im Alltag wirklich können solltest.",
     roadmapTitle:"Der kürzeste Weg zu einem handlungsfähigen B2.",phrasesTitle:"Sprich ab heute.",phrasesIntro:"Hör zu, sprich dreimal nach und verändere dann ein Element. Markiere einen Satz erst, wenn du ihn ohne Lesen sagen kannst.",
@@ -194,6 +207,7 @@ const nativeUi = {
   },
   es: {
     locale:"es",day:"DÍA",viewLabel:"IDIOMA DE LAS EXPLICACIONES",viewHint:"Elige italiano, inglés o inmersión completa en español.",targetSuffix:"inmersión",
+    method:{kicker:"EL MÉTODO",title:"El 20 % que te da autonomía.",intro:"No todas las palabras son igual de útiles. Empieza por las situaciones más frecuentes y crea respuestas automáticas; el vocabulario más elaborado llegará después.",leadTitle:"Aprende bloques, no palabras aisladas.",leadText:"«Quisiera…», «¿Dónde puedo…?» y «No he entendido…» generan cientos de frases útiles. Memoriza la estructura y cambia un solo elemento cada vez.",formulaLabel:"Fórmula del método",formula:["ESCUCHA","IMITACIÓN","USO","REPASO"],steps:[["Trabaja con audios breves","Elige fragmentos de 20 a 60 segundos: primero con la transcripción y después sin ella.","8 min"],["Imita en voz alta","Habla a la vez que el audio: primero céntrate en el ritmo y la entonación; después, en la precisión.","7 min"],["Produce desde el principio","Escribe un mensaje, graba una nota de voz o conversa durante cinco minutos.","10 min"],["Repasa tus errores","Conserva solo frases útiles y recuérdalas después de 1, 3, 7 y 14 días.","5 min"]]},
     levelNames:{A1:"Primeros pasos",A2:"Rutinas",B1:"Independiente",B2:"Operativo",C1:"Avanzado",C2:"Dominio"},
     studioTitle:"Del primer café a la primera reunión.",studioIntro:"Elige un nivel. Cada etapa indica lo que deberías saber hacer en la vida real.",
     roadmapTitle:"La ruta más corta hacia un B2 operativo.",phrasesTitle:"Empieza a hablar hoy.",phrasesIntro:"Escucha, repite tres veces y cambia un elemento. Marca una frase solo cuando puedas decirla sin leer.",
@@ -203,6 +217,7 @@ const nativeUi = {
   },
   fr: {
     locale:"fr",day:"JOUR",viewLabel:"LANGUE DES EXPLICATIONS",viewHint:"Choisis l’italien, l’anglais ou l’immersion complète en français.",targetSuffix:"immersion",
+    method:{kicker:"LA MÉTHODE",title:"Les 20 % qui te rendent autonome.",intro:"Tous les mots ne sont pas aussi utiles. Commence par les situations les plus fréquentes et crée des automatismes ; le vocabulaire plus recherché viendra ensuite.",leadTitle:"Apprends des blocs, pas des mots isolés.",leadText:"« Je voudrais… », « Où puis-je… ? » et « Je n’ai pas compris… » permettent de former des centaines de phrases utiles. Mémorise la structure, puis ne change qu’un élément à la fois.",formulaLabel:"Formule de la méthode",formula:["ÉCOUTE","IMITATION","UTILISATION","RÉVISION"],steps:[["Travaille avec des extraits audio courts","Choisis des extraits de 20 à 60 secondes : d’abord avec la transcription, puis sans.","8 min"],["Imite à voix haute","Parle en même temps que l’audio : travaille d’abord le rythme et l’intonation, puis la précision.","7 min"],["Produis tout de suite","Écris un message, enregistre une note vocale ou parle pendant cinq minutes.","10 min"],["Revois tes erreurs","Ne garde que les phrases utiles et rappelle-les après 1, 3, 7 et 14 jours.","5 min"]]},
     levelNames:{A1:"Premiers pas",A2:"Routines",B1:"Autonome",B2:"Opérationnel",C1:"Avancé",C2:"Maîtrise"},
     studioTitle:"Du premier café à la première réunion.",studioIntro:"Choisis un niveau. Chaque étape indique ce que tu dois vraiment savoir faire au quotidien.",
     roadmapTitle:"Le chemin le plus court vers un B2 opérationnel.",phrasesTitle:"Parle dès aujourd’hui.",phrasesIntro:"Écoute, répète trois fois, puis change un élément. Valide une phrase seulement si tu peux la dire sans lire.",
@@ -212,6 +227,7 @@ const nativeUi = {
   },
   ru: {
     locale:"ru",day:"ДЕНЬ",viewLabel:"ЯЗЫК ОБЪЯСНЕНИЙ",viewHint:"Выберите итальянский, английский или полное погружение в русский язык.",targetSuffix:"погружение",
+    method:{kicker:"МЕТОД",title:"Те 20 %, которые помогут стать самостоятельнее.",intro:"Не все слова одинаково полезны. Начните с самых частых ситуаций и доведите нужные реакции до автоматизма; более сложная лексика придёт позже.",leadTitle:"Учите готовые конструкции, а не отдельные слова.",leadText:"«Я хотел бы…», «Где можно…?» и «Я не понял…» помогают составить сотни полезных фраз. Запомните конструкцию и каждый раз меняйте только один элемент.",formulaLabel:"Формула метода",formula:["СЛУШАЙТЕ","ПОВТОРЯЙТЕ","ИСПОЛЬЗУЙТЕ","ЗАКРЕПЛЯЙТЕ"],steps:[["Работайте с короткими аудиофрагментами","Выбирайте записи длиной от 20 до 60 секунд: сначала с текстом, затем без него.","8 мин"],["Повторяйте вслух","Говорите одновременно с записью: сначала отрабатывайте ритм и интонацию, затем точность.","7 мин"],["Сразу используйте язык","Напишите сообщение, запишите голосовую заметку или поговорите пять минут.","10 мин"],["Разбирайте свои ошибки","Оставляйте только полезные фразы и повторяйте их через 1, 3, 7 и 14 дней.","5 мин"]]},
     levelNames:{A1:"Первые шаги",A2:"Повседневность",B1:"Самостоятельно",B2:"Рабочий уровень",C1:"Продвинутый",C2:"Мастерство"},
     studioTitle:"От первого кофе до первого совещания.",studioIntro:"Выберите уровень. Каждый этап показывает, что нужно уметь делать в реальной жизни.",
     roadmapTitle:"Кратчайший путь к рабочему уровню B2.",phrasesTitle:"Начните говорить сегодня.",phrasesIntro:"Послушайте, повторите три раза, затем измените один элемент. Отмечайте фразу, только если можете сказать её без текста.",
@@ -221,6 +237,7 @@ const nativeUi = {
   },
   zh: {
     locale:"zh",day:"第",viewLabel:"讲解语言",viewHint:"选择意大利语、英语或全中文沉浸模式。",targetSuffix:"沉浸模式",
+    method:{kicker:"学习方法",title:"掌握关键的 20%，更快独立使用语言。",intro:"并非所有词语都同样实用。先练习最常见的场景，形成自然反应；更丰富的词汇可以以后再学。",leadTitle:"学习常用句型，而不是孤立的单词。",leadText:"“我想……”“我在哪里可以……？”和“我没听懂……”能组合出数百个实用句子。先记住句型，再一次替换一个部分。",formulaLabel:"学习方法公式",formula:["听","模仿","运用","复习"],steps:[["练习短音频","选择 20 到 60 秒的片段：先对照文本听，再脱离文本听。","8 分钟"],["大声模仿","跟着音频同时说：先练节奏和语调，再提高准确度。","7 分钟"],["马上开口使用","写一条消息、录一段语音，或进行五分钟对话。","10 分钟"],["复习自己的错误","只保留实用句子，并在第 1、3、7 和 14 天复习。","5 分钟"]]},
     levelNames:{A1:"入门",A2:"日常",B1:"独立",B2:"实用",C1:"高级",C2:"精通"},
     studioTitle:"从第一次点咖啡到第一次参加会议。",studioIntro:"选择一个等级。每个阶段都说明你在现实生活中真正需要做到什么。",
     roadmapTitle:"通往实用 B2 的最短路线。",phrasesTitle:"从今天开始说。",phrasesIntro:"先听，再重复三遍，然后替换一个成分。只有不看文字也能说出来时，才标记为已掌握。",
@@ -230,6 +247,7 @@ const nativeUi = {
   },
   ja: {
     locale:"ja",day:"日目",viewLabel:"説明の言語",viewHint:"イタリア語、英語、または日本語だけのイマージョンを選べます。",targetSuffix:"イマージョン",
+    method:{kicker:"学習法",title:"自立につながる大切な 20％。",intro:"すべての単語が同じように役立つわけではありません。まずよくある場面から練習して、自然に反応できるようにしましょう。細かな語彙は後から増やせます。",leadTitle:"単語ではなく、まとまりで覚える。",leadText:"「～したいです」「どこで～できますか」「分かりませんでした」のような型から、何百もの実用的な文を作れます。型を覚え、一度に一か所だけ変えましょう。",formulaLabel:"学習法の流れ",formula:["聞く","まねる","使う","復習する"],steps:[["短い音声で練習する","20秒から60秒の音声を選び、最初は台本を見ながら、次は見ないで聞きます。","8分"],["声に出してまねる","音声と同時に話し、まずリズムとイントネーション、次に正確さを意識します。","7分"],["すぐに使う","メッセージを書く、音声を録音する、または5分間会話します。","10分"],["間違いを復習する","実際に使う文だけを残し、1日後、3日後、7日後、14日後に思い出します。","5分"]]},
     levelNames:{A1:"入門",A2:"日常",B1:"自立",B2:"実用",C1:"上級",C2:"習熟"},
     studioTitle:"最初のコーヒーから最初の会議まで。",studioIntro:"レベルを選びましょう。各段階には、実生活で本当にできるようになることが書かれています。",
     roadmapTitle:"実用的な B2 への最短ルート。",phrasesTitle:"今日から話そう。",phrasesIntro:"聞いて、三回繰り返し、一つだけ変えます。見ないで言えるようになってから「習得済み」にしましょう。",
