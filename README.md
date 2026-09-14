@@ -7,6 +7,7 @@ Guida statica e interattiva per imparare inglese, tedesco, spagnolo, francese, r
 Copia nella stessa cartella del server:
 
 - `index.html`
+- `favicon.svg`
 - `styles.css`
 - `course-i18n.js`
 - `phrase-data.js`

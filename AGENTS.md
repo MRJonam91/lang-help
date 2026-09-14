@@ -4,6 +4,7 @@
 - Entrypoint: `index.html`.
 - Content and interactions: `app.js`; English and immersion copy: `course-i18n.js`; practical phrase corpus: `phrase-data.js`.
 - Styling: `styles.css`.
+- Brand asset: `favicon.svg`.
 - Tests: open `index.html` or serve the folder and run the browser smoke checks in `README.md`.
 - Config/CI: none.
 - Commands: `py -m http.server 8080` for local preview.
